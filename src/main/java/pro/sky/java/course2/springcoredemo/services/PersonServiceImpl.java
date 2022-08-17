@@ -1,6 +1,7 @@
 package pro.sky.java.course2.springcoredemo.services;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +12,21 @@ import java.util.logging.Logger;
 @Service
 //@Scope(scopeName = "prototype")
 public class PersonServiceImpl implements PersonService {
-    private final PerfectWeightCalculator perfectWeightCalculator;
+    //    @Autowired
+    private PerfectWeightCalculator perfectWeightCalculator;
     Logger log = LoggerFactory.getLogger(PersonServiceImpl.class);
 
-    public PersonServiceImpl(PerfectWeightCalculator perfectWeightCalculator) {
-        this.perfectWeightCalculator = perfectWeightCalculator;
+    public PersonServiceImpl() {
+//        this.perfectWeightCalculator = perfectWeightCalculator;
         log.info("Person Service Impl")
     }
 
     @PostConstruct
     public void setup() {
         log.info("Person service is created");
+        if (perfectWeightCalculator != null) {
+            log.info("dependency created");
+        }
     }
 
     @PreDestroy
@@ -42,5 +47,22 @@ public class PersonServiceImpl implements PersonService {
 
     }
 
-    private static PersonServiceImpl instance;
+    @Autowired
+    public void setPerfectWeightCalculator(PerfectWeightCalculator perfectWeightCalculator) {
+        this.perfectWeightCalculator = perfectWeightCalculator;
+    }
+
+//    private static PersonServiceImpl instance;
+
+//    public static PersonServiceImpl getInstance() {
+//        if (instance == null) {
+//            instance = new PersonServiceImpl();
+//        }
+//        return instance;
+//    }
+//
+//    public PersonServiceImpl() {
+////        this.perfectWeightCalculator = new PerfectWeightCalculatorImpl();
+//        this.perfectWeightCalculator = perfectWeightCalculatorImpl.getInstance();
+//    }
 }
